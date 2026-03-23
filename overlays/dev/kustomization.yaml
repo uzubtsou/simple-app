@@ -6,6 +6,7 @@ commonLabels:
   env: dev
 resources:
   - namespace.yaml
+  - httproute.yaml
   - ../../base
 patches:
   - patch: |-
