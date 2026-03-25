@@ -7,7 +7,7 @@ spec:
     - name: sandpit
       namespace: istio-ingress
   hostnames:
-    - podinfo.sand.pit.im
+    - qa-info.sand.pit.im
   rules:
     - backendRefs:
         - name: dev-podinfo
