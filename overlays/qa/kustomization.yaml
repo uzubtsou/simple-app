@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: podinfo-dev
+namePrefix: qa-
+labels:
+  - pairs:
+      env: qa
+    includeSelectors: false
+    includeTemplates: true
+resources:
+  - namespace.yaml
+  - httproute.yaml
+  - ../../base
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
+    target:
+      kind: Deployment
+      name: podinfo
