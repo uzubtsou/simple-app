@@ -13,4 +13,5 @@ spec:
   prune: true
   wait: true
   timeout: 5m
-  targetNamespace: podinfo-dev
+  dependsOn:
+    - name: namespaces

@@ -10,5 +10,5 @@ spec:
     - qa-info.sand.pit.im
   rules:
     - backendRefs:
-        - name: podinfo
+        - name: qa-podinfo
           port: 8080
