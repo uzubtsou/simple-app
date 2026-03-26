@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: backend
   template:
     metadata:
       labels:
-        app: frontend
+        app: backend
     spec:
       containers:
-        - name: frontend
-          image: frontend
+        - name: backend
+          image: backend
           ports:
             - name: http
               containerPort: 9898
@@ -23,7 +23,7 @@ spec:
               value: "9898"
           envFrom:
             - configMapRef:
-                name: frontend-config
+                name: backend-config
           lifecycle:
             preStop:
               exec:

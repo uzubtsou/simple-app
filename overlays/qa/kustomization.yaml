@@ -1,21 +1,35 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: podinfo-qa
+namespace: qa
 namePrefix: qa-
 labels:
   - pairs:
       env: qa
     includeSelectors: false
     includeTemplates: true
+images:
+  - name: frontend
+    newName: ghcr.io/stefanprodan/podinfo
+    newTag: 6.7.0
+  - name: backend
+    newName: ghcr.io/stefanprodan/podinfo
+    newTag: 6.7.0
 resources:
   - namespace.yaml
   - httproute.yaml
   - ../../base
 configMapGenerator:
-  - name: podinfo-config
+  - name: frontend-config
     literals:
       - PODINFO_UI_COLOR=#3EB489
       - PODINFO_UI_MESSAGE=Welcome to the qa
+      - PODINFO_BACKEND_URL=http://qa-backend:9898/echo
+    options:
+      disableNameSuffixHash: true
+  - name: backend-config
+    literals:
+      - PODINFO_UI_COLOR=#3EB489
+      - PODINFO_UI_MESSAGE=Backend qa
     options:
       disableNameSuffixHash: true
 patches:
@@ -25,4 +39,11 @@ patches:
         value: 2
     target:
       kind: Deployment
-      name: podinfo
+      name: frontend
+  - patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
+    target:
+      kind: Deployment
+      name: backend
