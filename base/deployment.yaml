@@ -21,6 +21,9 @@ spec:
           env:
             - name: PODINFO_PORT
               value: "9898"
+          envFrom:
+            - configMapRef:
+                name: podinfo-config
           lifecycle:
             preStop:
               exec:

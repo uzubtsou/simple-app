@@ -11,6 +11,13 @@ resources:
   - namespace.yaml
   - httproute.yaml
   - ../../base
+configMapGenerator:
+  - name: podinfo-config
+    literals:
+      - PODINFO_UI_COLOR=#34577c
+      - PODINFO_UI_MESSAGE=Welcome to the dev
+    options:
+      disableNameSuffixHash: true
 patches:
   - patch: |-
       - op: replace
