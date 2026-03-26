@@ -5,7 +5,7 @@ metadata:
   name: simple-app
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 1m
   url: https://github.com/uzubtsou/simple-app
   ref:
     branch: main
