@@ -8,6 +8,7 @@ labels:
     includeSelectors: false
     includeTemplates: true
 resources:
+  - namespace.yaml
   - httproute.yaml
   - ../../base
 configMapGenerator:
