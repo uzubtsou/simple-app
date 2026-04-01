@@ -24,14 +24,10 @@ configMapGenerator:
       - PODINFO_UI_COLOR=#3EB489
       - PODINFO_UI_MESSAGE=Welcome to the qa
       - PODINFO_BACKEND_URL=http://qa-backend:9898/echo
-    options:
-      disableNameSuffixHash: true
   - name: backend-config
     literals:
       - PODINFO_UI_COLOR=#3EB489
       - PODINFO_UI_MESSAGE=Backend qa
-    options:
-      disableNameSuffixHash: true
 patches:
   - patch: |-
       - op: replace
