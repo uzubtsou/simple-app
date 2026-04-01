@@ -11,3 +11,4 @@ spec:
     ui:
       color: "#34577c"
       message: "Backend dev"
+    logLevel: debug
