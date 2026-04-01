@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frontend
+spec:
+  chart:
+    spec:
+      version: 6.8.0
+  values:
+    replicaCount: 1
+    ui:
+      color: "#34577c"
+      message: "Welcome to the dev"
+    backend: http://backend:9898/echo
+    logLevel: debug

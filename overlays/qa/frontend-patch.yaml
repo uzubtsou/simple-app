@@ -1,0 +1,14 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frontend
+spec:
+  chart:
+    spec:
+      version: 6.7.0
+  values:
+    replicaCount: 2
+    ui:
+      color: "#3EB489"
+      message: "Welcome to the qa"
+    backend: http://backend:9898/echo

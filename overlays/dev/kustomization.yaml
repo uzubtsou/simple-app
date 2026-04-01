@@ -1,46 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: dev
-namePrefix: dev-
-labels:
-  - pairs:
-      env: dev
-    includeSelectors: false
-    includeTemplates: true
-images:
-  - name: frontend
-    newName: ghcr.io/stefanprodan/podinfo
-    newTag: 6.8.0
-  - name: backend
-    newName: ghcr.io/stefanprodan/podinfo
-    newTag: 6.8.0
 resources:
+  - ../../base
   - namespace.yaml
   - httproute.yaml
-  - ../../base
-configMapGenerator:
-  - name: frontend-config
-    literals:
-      - PODINFO_UI_COLOR=#34577c
-      - PODINFO_UI_MESSAGE=Welcome to the dev
-      - PODINFO_BACKEND_URL=http://dev-backend:9898/echo
-      - PODINFO_LOG_LEVEL=debug
-  - name: backend-config
-    literals:
-      - PODINFO_UI_COLOR=#34577c
-      - PODINFO_UI_MESSAGE=Backend dev
 patches:
-  - patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 1
-    target:
-      kind: Deployment
-      name: frontend
-  - patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 1
-    target:
-      kind: Deployment
-      name: backend
+  - path: frontend-patch.yaml
+  - path: backend-patch.yaml
