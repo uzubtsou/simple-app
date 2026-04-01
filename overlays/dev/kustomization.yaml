@@ -5,6 +5,7 @@ resources:
   - ../../base
   - namespace.yaml
   - httproute.yaml
+  - backend-httproute.yaml
 patches:
   - path: frontend-patch.yaml
   - path: backend-patch.yaml

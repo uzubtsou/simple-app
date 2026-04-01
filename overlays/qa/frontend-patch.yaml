@@ -11,4 +11,4 @@ spec:
     ui:
       color: "#3EB489"
       message: "Welcome to the qa"
-    backend: http://backend:9898/echo
+    backend: http://qa-backend-info.sand.pit.im/echo

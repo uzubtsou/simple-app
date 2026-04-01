@@ -11,5 +11,5 @@ spec:
     ui:
       color: "#34577c"
       message: "Welcome to the dev"
-    backend: http://backend:9898/echo
+    backend: http://dev-backend-info.sand.pit.im/echo
     logLevel: debug
