@@ -1,0 +1,46 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: frontend
+spec:
+  parentRefs:
+    - name: sandpit
+      namespace: istio-ingress
+  hostnames:
+    - dev-info.sand.pit.im
+  rules:
+    - backendRefs:
+        - name: frontend
+          port: 9898
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: backend
+spec:
+  parentRefs:
+    - name: sandpit
+      namespace: istio-ingress
+  hostnames:
+    - dev-backend-info.sand.pit.im
+  rules:
+    - backendRefs:
+        - name: backend
+          port: 9898
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: backend
+  namespace: dev
+spec:
+  hosts:
+    - dev-backend-info.sand.pit.im
+  ports:
+    - number: 80
+      name: http
+      protocol: HTTP
+      targetPort: 9898
+  resolution: DNS
+  endpoints:
+    - address: backend.dev.svc.cluster.local

@@ -4,8 +4,6 @@ namespace: dev
 resources:
   - ../../base
   - namespace.yaml
-  - httproute.yaml
-  - backend-httproute.yaml
-  - backend-serviceentry.yaml
+  - networking.yaml
 patches:
   - path: patches.yaml
