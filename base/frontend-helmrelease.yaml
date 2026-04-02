@@ -16,10 +16,10 @@ spec:
   values:
     podAnnotations:
       proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
-      app.komodor.com/app: https://github.com/uzubtsou/simple-app
-      app.komodor.com/app.ref: main
+      app.komodor.com/app: "https://github.com/uzubtsou/simple-app"
+      app.komodor.com/app.ref: "main"
     fullnameOverride: frontend
     logLevel: info
     ui:
       message: "Welcome to the ${env_tier}"
-    backend: http://${env_tier}-backend-info.sand.pit.im/echo
+    backend: "http://${env_tier}-backend-info.sand.pit.im/echo"

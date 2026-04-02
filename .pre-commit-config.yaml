@@ -1,0 +1,41 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args:
+          - -d
+          - |
+            extends: relaxed
+            rules:
+              line-length:
+                max: 120
+              truthy:
+                allowed-values: ["true", "false"]
+                level: warning
+
+  - repo: local
+    hooks:
+      - id: kustomize-build-dev
+        name: kustomize build overlays/dev
+        language: system
+        entry: kustomize build overlays/dev
+        pass_filenames: false
+        files: ^(base|overlays/dev)/
+
+      - id: kustomize-build-qa
+        name: kustomize build overlays/qa
+        language: system
+        entry: kustomize build overlays/qa
+        pass_filenames: false
+        files: ^(base|overlays/qa)/

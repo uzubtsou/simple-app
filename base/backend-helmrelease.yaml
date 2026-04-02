@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   values:
     podAnnotations:
-      app.komodor.com/app: https://github.com/uzubtsou/simple-app
+      app.komodor.com/app: "https://github.com/uzubtsou/simple-app"
       app.komodor.com/app.ref: main
     fullnameOverride: backend
     replicaCount: 1
