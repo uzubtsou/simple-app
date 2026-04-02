@@ -11,6 +11,5 @@ spec:
       proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
     replicaCount: 1
     ui:
-      color: "#34577c"
       message: "Welcome to the dev"
     backend: http://dev-backend-info.sand.pit.im/echo
