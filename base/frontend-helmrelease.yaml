@@ -6,11 +6,17 @@ spec:
   interval: 10m
   chart:
     spec:
+      version: 6.8.0
       chart: podinfo
       sourceRef:
         kind: HelmRepository
         name: podinfo
         namespace: flux-system
   values:
+    podAnnotations:
+      proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
     fullnameOverride: frontend
     logLevel: info
+    ui:
+      message: "Welcome to the ${env_tier}"
+    backend: http://${env_tier}-backend-info.sand.pit.im/echo

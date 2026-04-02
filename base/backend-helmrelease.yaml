@@ -6,6 +6,7 @@ spec:
   interval: 10m
   chart:
     spec:
+      version: 6.8.0
       chart: podinfo
       sourceRef:
         kind: HelmRepository
@@ -13,4 +14,6 @@ spec:
         namespace: flux-system
   values:
     fullnameOverride: backend
-    logLevel: info
+    replicaCount: 1
+    ui:
+      message: "Backend ${env_tier}"

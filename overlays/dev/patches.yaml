@@ -1,18 +1,3 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: backend
-spec:
-  chart:
-    spec:
-      version: 6.8.0
-  values:
-    logLevel: debug
-    replicaCount: 1
-    ui:
-      message: "Backend dev"
-    faults:
-      delay: true
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -23,9 +8,4 @@ spec:
     spec:
       version: 6.8.0
   values:
-    podAnnotations:
-      proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
     replicaCount: 1
-    ui:
-      message: "Welcome to the dev"
-    backend: http://dev-backend-info.sand.pit.im/echo

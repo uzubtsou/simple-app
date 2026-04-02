@@ -7,7 +7,7 @@ spec:
     - name: sandpit
       namespace: istio-ingress
   hostnames:
-    - dev-info.sand.pit.im
+    - ${env_tier}-info.sand.pit.im
   rules:
     - backendRefs:
         - name: frontend
@@ -22,7 +22,7 @@ spec:
     - name: sandpit
       namespace: istio-ingress
   hostnames:
-    - dev-backend-info.sand.pit.im
+    - ${env_tier}-backend-info.sand.pit.im
   rules:
     - backendRefs:
         - name: backend
@@ -32,10 +32,9 @@ apiVersion: networking.istio.io/v1
 kind: ServiceEntry
 metadata:
   name: backend
-  namespace: dev
 spec:
   hosts:
-    - dev-backend-info.sand.pit.im
+    - ${env_tier}-backend-info.sand.pit.im
   ports:
     - number: 80
       name: http
@@ -43,4 +42,4 @@ spec:
       targetPort: 9898
   resolution: DNS
   endpoints:
-    - address: backend.dev.svc.cluster.local
+    - address: backend.${env_tier}.svc.cluster.local

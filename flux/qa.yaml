@@ -13,3 +13,6 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  postBuild:
+    substitute:
+      env_tier: "qa"
