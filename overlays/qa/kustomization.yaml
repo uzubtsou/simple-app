@@ -8,5 +8,4 @@ resources:
   - backend-httproute.yaml
   - backend-serviceentry.yaml
 patches:
-  - path: frontend-patch.yaml
-  - path: backend-patch.yaml
+  - path: patches.yaml

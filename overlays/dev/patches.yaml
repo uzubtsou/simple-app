@@ -1,6 +1,22 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
+  name: backend
+spec:
+  chart:
+    spec:
+      version: 6.8.0
+  values:
+    logLevel: debug
+    replicaCount: 1
+    ui:
+      message: "Backend dev"
+    faults:
+      delay: true
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
   name: frontend
 spec:
   chart:
