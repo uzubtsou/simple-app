@@ -5,5 +5,6 @@ namespace: dev
 resources:
   - ../../base
   - ../../base/networking
+  - ../../base/flagger
 patches:
   - path: patches.yaml
