@@ -2,7 +2,7 @@
 apiVersion: flagger.app/v1beta1
 kind: MetricTemplate
 metadata:
-  name: request-success-rate
+  name: istio-success-rate
 spec:
   provider:
     type: prometheus
@@ -30,7 +30,7 @@ spec:
 apiVersion: flagger.app/v1beta1
 kind: MetricTemplate
 metadata:
-  name: request-duration
+  name: istio-latency
 spec:
   provider:
     type: prometheus

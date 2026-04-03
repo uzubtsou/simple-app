@@ -20,26 +20,12 @@ spec:
     hosts:
       - ${env_tier}-backend-info.sand.pit.im
   analysis:
-    interval: 1m
+    interval: 10s
     threshold: 5
     maxWeight: 50
     stepWeight: 10
-    metrics:
-      - name: request-success-rate
-        templateRef:
-          name: request-success-rate
-        thresholdRange:
-          min: 99
-        interval: 1m
-      - name: request-duration
-        templateRef:
-          name: request-duration
-        thresholdRange:
-          max: 500
-        interval: 30s
     webhooks:
-      - name: load-test
-        url: http://flagger-loadtester.flagger-system/
+      - name: functional-check
+        type: pre-rollout
+        url: http://backend-canary.${env_tier}:9898/echo
         timeout: 5s
-        metadata:
-          cmd: "hey -z 1m -q 10 -c 2 http://${env_tier}-backend-info.sand.pit.im/"
