@@ -28,19 +28,3 @@ spec:
     - backendRefs:
         - name: backend
           port: 9898
----
-apiVersion: networking.istio.io/v1
-kind: ServiceEntry
-metadata:
-  name: backend
-spec:
-  hosts:
-    - ${env_tier}-backend-info.sand.pit.im
-  ports:
-    - number: 80
-      name: http
-      protocol: HTTP
-      targetPort: 9898
-  resolution: DNS
-  endpoints:
-    - address: backend.${env_tier}.svc.cluster.local

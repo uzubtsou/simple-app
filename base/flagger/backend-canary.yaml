@@ -1,0 +1,45 @@
+---
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: backend
+spec:
+  provider: gatewayapi:v1
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  service:
+    port: 9898
+    targetPort: 9898
+    gatewayRefs:
+      - name: sandpit
+        namespace: istio-ingress
+        group: gateway.networking.k8s.io
+        kind: Gateway
+    hosts:
+      - ${env_tier}-backend-info.sand.pit.im
+  analysis:
+    interval: 1m
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    metrics:
+      - name: request-success-rate
+        templateRef:
+          name: request-success-rate
+        thresholdRange:
+          min: 99
+        interval: 1m
+      - name: request-duration
+        templateRef:
+          name: request-duration
+        thresholdRange:
+          max: 500
+        interval: 30s
+    webhooks:
+      - name: load-test
+        url: http://flagger-loadtester.flagger-system/
+        timeout: 5s
+        metadata:
+          cmd: "hey -z 1m -q 10 -c 2 http://${env_tier}-backend-info.sand.pit.im/"

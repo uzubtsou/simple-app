@@ -5,4 +5,5 @@ resources:
   - frontend-helmrelease.yaml
   - backend-helmrelease.yaml
   - namespace.yaml
-  - networking.yaml
+  - networking/
+  - flagger/
