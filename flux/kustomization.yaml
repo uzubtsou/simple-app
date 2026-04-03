@@ -6,4 +6,5 @@ resources:
   - helmrepository.yaml
   - dev.yaml
   - qa.yaml
+  - rset.yaml
   - notifications.yaml
