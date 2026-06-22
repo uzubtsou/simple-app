@@ -7,6 +7,7 @@ Test repository that deploys a dummy app (podinfo) into a local Kubernetes clust
 - A local Kubernetes cluster with `sandpit` kubectl context configured — use [uzubtsou/lean-k8s](https://github.com/uzubtsou/lean-k8s) to spin one up
 - [Flux CLI](https://fluxcd.io/flux/installation/) or [Argo CD](https://argo-cd.readthedocs.io/en/stable/getting_started/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [just](https://just.systems/)
 - DNS wildcard `*.sand.pit.im` pointing to `127.0.0.1`
 
 ## Cluster setup
@@ -18,23 +19,32 @@ Use [lean-k8s](https://github.com/uzubtsou/lean-k8s) to create a cluster with th
 ```bash
 just up
 just mesh
-just progressive
 ```
 
-For Flux, also install Flux Operator:
+For Flux, also install Flagger and Flux Operator:
 
 ```bash
+just progressive
 just gitops flux-operator
 ```
 
-For Argo CD, install Argo CD in the `argocd` namespace. Both options use Istio, Flagger, and the `sandpit` Gateway.
+For Argo CD, install Argo CD in the `argocd` namespace. Both options use Istio and the `sandpit` Gateway.
 
 ## Deploy with Flux
 
-Apply the Flux resources:
+Apply both Flux environments with either command:
 
 ```bash
 kubectl apply -k flux/
+# or
+just flux
+```
+
+Apply one environment only:
+
+```bash
+kubectl apply -k flux/dev/ # or: just flux-dev
+kubectl apply -k flux/qa/  # or: just flux-qa
 ```
 
 Flux will reconcile and deploy the app into the `dev` and `qa` namespaces. Watch progress:
@@ -67,10 +77,24 @@ kubectl delete -k flux/
 
 ## Deploy with Argo CD
 
-With Argo CD installed in the `argocd` namespace, apply the environment-specific ApplicationSets:
+With Argo CD installed in the `argocd` namespace, apply both environment-specific ApplicationSets with either command:
 
 ```bash
 kubectl apply -k argocd/
+# or
+just argocd
+```
+
+Apply one environment only:
+
+```bash
+kubectl apply -k argocd/dev/ # or: just argocd-dev
+kubectl apply -k argocd/qa/  # or: just argocd-qa
+```
+
+Watch reconciliation:
+
+```bash
 kubectl get applications -n argocd --watch
 ```
 
