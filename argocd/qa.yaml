@@ -1,0 +1,85 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: simple-app-qa
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    - list:
+        elements:
+          - env: qa
+            server: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: 'simple-app-{{ .env }}'
+    spec:
+      project: default
+      destination:
+        server: '{{ .server }}'
+        namespace: '{{ .env }}'
+      sources:
+        - repoURL: ghcr.io/stefanprodan/charts
+          chart: podinfo
+          targetRevision: 6.8.0
+          helm:
+            releaseName: frontend
+            skipTests: true
+            parameters:
+              - name: fullnameOverride
+                value: argocd-frontend
+              - name: replicaCount
+                value: "2"
+              - name: logLevel
+                value: info
+              - name: ui.color
+                value: "#3EB489"
+              - name: ui.message
+                value: Welcome to the qa
+              - name: backend
+                value: http://argocd-qa-backend-info.sand.pit.im/echo
+            valuesObject:
+              podAnnotations:
+                proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
+                app.komodor.com/app: https://github.com/uzubtsou/simple-app
+                app.komodor.com/app.ref: main
+        - repoURL: ghcr.io/stefanprodan/charts
+          chart: podinfo
+          targetRevision: 6.8.0
+          helm:
+            releaseName: backend
+            skipTests: true
+            parameters:
+              - name: fullnameOverride
+                value: argocd-backend
+              - name: replicaCount
+                value: "2"
+              - name: ui.color
+                value: "#3EB489"
+              - name: ui.message
+                value: Backend qa
+            valuesObject:
+              podAnnotations:
+                app.komodor.com/app: https://github.com/uzubtsou/simple-app
+                app.komodor.com/app.ref: main
+        - repoURL: https://github.com/uzubtsou/simple-app
+          targetRevision: main
+          path: argocd/resources
+          helm:
+            parameters:
+              - name: env
+                value: qa
+              - name: flagger
+                value: "false"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        managedNamespaceMetadata:
+          labels:
+            istio-injection: enabled
+        syncOptions:
+          - CreateNamespace=true

@@ -1,0 +1,110 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd-frontend
+spec:
+  parentRefs:
+    - name: sandpit
+      namespace: istio-ingress
+  hostnames:
+    - argocd-{{ .Values.env }}-info.sand.pit.im
+  rules:
+    - backendRefs:
+        - name: argocd-frontend
+          port: 9898
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd-backend
+spec:
+  parentRefs:
+    - name: sandpit
+      namespace: istio-ingress
+  hostnames:
+    - argocd-{{ .Values.env }}-backend-info.sand.pit.im
+  rules:
+    - backendRefs:
+        - name: argocd-backend
+          port: 9898
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: argocd-backend
+spec:
+  hosts:
+    - argocd-{{ .Values.env }}-backend-info.sand.pit.im
+  ports:
+    - number: 80
+      name: http
+      protocol: HTTP
+      targetPort: 9898
+  resolution: DNS
+  endpoints:
+    - address: argocd-backend.{{ .Values.env }}.svc.cluster.local
+{{- if .Values.flagger }}
+---
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: argocd-frontend
+spec:
+  provider: gatewayapi:v1
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: argocd-frontend
+  service:
+    port: 9898
+    targetPort: 9898
+    gatewayRefs:
+      - name: sandpit
+        namespace: istio-ingress
+        group: gateway.networking.k8s.io
+        kind: Gateway
+    hosts:
+      - argocd-{{ .Values.env }}-info.sand.pit.im
+  analysis:
+    interval: 10s
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    webhooks:
+      - name: functional-check
+        type: pre-rollout
+        url: http://argocd-frontend-canary.{{ .Values.env }}:9898/echo
+        timeout: 5s
+---
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: argocd-backend
+spec:
+  provider: gatewayapi:v1
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: argocd-backend
+  service:
+    port: 9898
+    targetPort: 9898
+    gatewayRefs:
+      - name: sandpit
+        namespace: istio-ingress
+        group: gateway.networking.k8s.io
+        kind: Gateway
+    hosts:
+      - argocd-{{ .Values.env }}-backend-info.sand.pit.im
+  analysis:
+    interval: 10s
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    webhooks:
+      - name: functional-check
+        type: pre-rollout
+        url: http://argocd-backend-canary.{{ .Values.env }}:9898/echo
+        timeout: 5s
+{{- end }}
