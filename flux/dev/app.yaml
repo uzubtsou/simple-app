@@ -16,3 +16,5 @@ spec:
   postBuild:
     substitute:
       env_tier: "dev"
+      frontend_version: "6.9.0"
+      backend_version: "6.8.0"

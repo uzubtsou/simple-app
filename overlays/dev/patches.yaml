@@ -4,8 +4,5 @@ kind: HelmRelease
 metadata:
   name: frontend
 spec:
-  chart:
-    spec:
-      version: 6.9.0
   values:
     replicaCount: 1

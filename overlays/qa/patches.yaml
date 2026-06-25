@@ -4,9 +4,6 @@ kind: HelmRelease
 metadata:
   name: backend
 spec:
-  chart:
-    spec:
-      version: 6.8.0
   values:
     replicaCount: 2
     ui:
@@ -18,9 +15,6 @@ kind: HelmRelease
 metadata:
   name: frontend
 spec:
-  chart:
-    spec:
-      version: 6.8.0
   values:
     replicaCount: 2
     ui:

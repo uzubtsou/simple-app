@@ -7,12 +7,30 @@ spec:
   interval: 10m
   chart:
     spec:
-      version: 6.8.0
+      version: ${frontend_version}
       chart: podinfo
       sourceRef:
         kind: HelmRepository
         name: podinfo
         namespace: flux-system
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: frontend
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: frontend
+              spec:
+                template:
+                  metadata:
+                    labels:
+                      app.kubernetes.io/version: "${frontend_version}"
   values:
     podAnnotations:
       proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
