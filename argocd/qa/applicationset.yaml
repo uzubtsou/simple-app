@@ -72,8 +72,6 @@ spec:
             parameters:
               - name: env
                 value: qa
-              - name: flagger
-                value: "false"
       syncPolicy:
         automated:
           prune: true
