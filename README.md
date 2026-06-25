@@ -21,12 +21,7 @@ just up
 just mesh
 ```
 
-For Flux, also install Flagger and Flux Operator:
-
-```bash
-just progressive
-just gitops flux-operator
-```
+For Flux, install the Flux CD controllers.
 
 For Argo CD, install Argo CD in the `argocd` namespace. Both options use Istio and the `sandpit` Gateway.
 
@@ -47,7 +42,7 @@ kubectl apply -k flux/dev/ # or: just flux-dev
 kubectl apply -k flux/qa/  # or: just flux-qa
 ```
 
-Flux will reconcile and deploy the app into the `dev` and `qa` namespaces. Watch progress:
+Flux will reconcile and deploy frontend and backend into the `dev` and `qa` namespaces. Watch progress:
 
 ```bash
 flux get kustomizations --watch
@@ -61,13 +56,11 @@ Once all kustomizations are `Ready`:
 
 - <http://dev-info.sand.pit.im>
 - <http://dev-backend-info.sand.pit.im>
-- <http://dev-rset.sand.pit.im> (ResourceSet)
 
 ### qa
 
 - <http://qa-info.sand.pit.im>
 - <http://qa-backend-info.sand.pit.im>
-- <http://qa-rset.sand.pit.im> (ResourceSet)
 
 ## Teardown
 
@@ -104,8 +97,6 @@ The generated `simple-app-dev` and `simple-app-qa` Applications deploy alongside
 - <http://argocd-dev-backend-info.sand.pit.im>
 - <http://argocd-qa-info.sand.pit.im>
 - <http://argocd-qa-backend-info.sand.pit.im>
-
-The Flux-only `ResourceSet` URLs are not created by Argo CD.
 
 ### Argo CD teardown
 
