@@ -68,6 +68,18 @@ Once all kustomizations are `Ready`:
 kubectl delete -k flux/
 ```
 
+## Try Kargo promotions
+
+With Kargo and the Flux environments running, apply the standalone Kargo demo:
+
+```bash
+kubectl --context sandpit apply -k kargo
+```
+
+Open <http://kargo.sand.pit.im> and select the `simple-app` project. Promote a
+Freight item to `dev`, then promote it from `dev` to `qa`. See
+[kargo/README.md](kargo/README.md) for the scope of this initial demo.
+
 ## Deploy with Argo CD
 
 With Argo CD installed in the `argocd` namespace, apply both environment-specific ApplicationSets with either command:

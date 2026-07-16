@@ -1,0 +1,45 @@
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: simple-app
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: podinfo
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: http
+          as: check-dev
+          config:
+            method: GET
+            url: http://frontend.dev.svc.cluster.local:9898/healthz
+            timeout: 10s
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: qa
+  namespace: simple-app
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: podinfo
+      sources:
+        stages:
+          - dev
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: http
+          as: check-qa
+          config:
+            method: GET
+            url: http://frontend.qa.svc.cluster.local:9898/healthz
+            timeout: 10s

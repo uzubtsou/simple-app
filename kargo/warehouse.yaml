@@ -1,0 +1,11 @@
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: podinfo
+  namespace: simple-app
+spec:
+  subscriptions:
+    - chart:
+        repoURL: oci://ghcr.io/stefanprodan/charts/podinfo
+        semverConstraint: ^6.0.0
