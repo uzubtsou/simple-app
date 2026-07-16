@@ -24,3 +24,5 @@ spec:
       name: simple-app-dev
     - kind: Kustomization
       name: simple-app-qa
+    - kind: Kustomization
+      name: simple-app-prod

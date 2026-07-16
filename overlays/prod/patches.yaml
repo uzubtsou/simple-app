@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: backend
+spec:
+  values:
+    replicaCount: 3
+    ui:
+      color: "#FF0000"
+      message: "Backend prod"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frontend
+spec:
+  values:
+    replicaCount: 3
+    ui:
+      color: "#FF0000"
+      message: "Welcome to the prod"
+    backend: http://prod-backend-info.sand.pit.im/echo

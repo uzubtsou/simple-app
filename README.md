@@ -27,7 +27,7 @@ For Argo CD, install Argo CD in the `argocd` namespace. Both options use Istio a
 
 ## Deploy with Flux
 
-Apply both Flux environments with either command:
+Apply all Flux environments with either command:
 
 ```bash
 kubectl apply -k flux/
@@ -40,9 +40,10 @@ Apply one environment only:
 ```bash
 kubectl apply -k flux/dev/ # or: just flux-dev
 kubectl apply -k flux/qa/  # or: just flux-qa
+kubectl apply -k flux/prod/ # or: just flux-prod
 ```
 
-Flux will reconcile and deploy frontend and backend into the `dev` and `qa` namespaces. Watch progress:
+Flux will reconcile and deploy frontend and backend into the `dev`, `qa`, and `prod` namespaces. Watch progress:
 
 ```bash
 flux get kustomizations --watch
@@ -62,6 +63,11 @@ Once all kustomizations are `Ready`:
 - <http://qa-info.sand.pit.im>
 - <http://qa-backend-info.sand.pit.im>
 
+### prod
+
+- <http://prod-info.sand.pit.im>
+- <http://prod-backend-info.sand.pit.im>
+
 ## Teardown
 
 ```bash
@@ -77,12 +83,12 @@ kubectl --context sandpit apply -k kargo
 ```
 
 Open <http://kargo.sand.pit.im> and select the `simple-app` project. Promote a
-Freight item to `dev`, then promote it from `dev` to `qa`. See
+Freight item to `dev`, then promote it from `dev` to `qa` and `prod`. See
 [kargo/README.md](kargo/README.md) for the scope of this initial demo.
 
 ## Deploy with Argo CD
 
-With Argo CD installed in the `argocd` namespace, apply both environment-specific ApplicationSets with either command:
+With Argo CD installed in the `argocd` namespace, apply all environment-specific ApplicationSets with either command:
 
 ```bash
 kubectl apply -k argocd/
@@ -95,6 +101,7 @@ Apply one environment only:
 ```bash
 kubectl apply -k argocd/dev/ # or: just argocd-dev
 kubectl apply -k argocd/qa/  # or: just argocd-qa
+kubectl apply -k argocd/prod/ # or: just argocd-prod
 ```
 
 Watch reconciliation:
@@ -103,12 +110,14 @@ Watch reconciliation:
 kubectl get applications -n argocd --watch
 ```
 
-The generated `simple-app-dev` and `simple-app-qa` Applications deploy alongside Flux in the same `dev` and `qa` namespaces. Their resources and URLs use an `argocd-` prefix to avoid collisions:
+The generated `simple-app-dev`, `simple-app-qa`, and `simple-app-prod` Applications deploy alongside Flux in the same namespaces. Their resources and URLs use an `argocd-` prefix to avoid collisions:
 
 - <http://argocd-dev-info.sand.pit.im>
 - <http://argocd-dev-backend-info.sand.pit.im>
 - <http://argocd-qa-info.sand.pit.im>
 - <http://argocd-qa-backend-info.sand.pit.im>
+- <http://argocd-prod-info.sand.pit.im>
+- <http://argocd-prod-backend-info.sand.pit.im>
 
 ### Argo CD teardown
 

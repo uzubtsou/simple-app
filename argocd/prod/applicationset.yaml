@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: simple-app-qa
+  name: simple-app-prod
   namespace: argocd
 spec:
   goTemplate: true
@@ -11,7 +11,7 @@ spec:
   generators:
     - list:
         elements:
-          - env: qa
+          - env: prod
             server: https://kubernetes.default.svc
   template:
     metadata:
@@ -32,15 +32,15 @@ spec:
               - name: fullnameOverride
                 value: argocd-frontend
               - name: replicaCount
-                value: "2"
+                value: "3"
               - name: logLevel
                 value: info
               - name: ui.color
-                value: "#3EB489"
+                value: "#FF0000"
               - name: ui.message
-                value: Welcome to the qa
+                value: Welcome to the prod
               - name: backend
-                value: http://argocd-qa-backend-info.sand.pit.im/echo
+                value: http://argocd-prod-backend-info.sand.pit.im/echo
             valuesObject:
               podAnnotations:
                 proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
@@ -56,11 +56,11 @@ spec:
               - name: fullnameOverride
                 value: argocd-backend
               - name: replicaCount
-                value: "2"
+                value: "3"
               - name: ui.color
-                value: "#3EB489"
+                value: "#FF0000"
               - name: ui.message
-                value: Backend qa
+                value: Backend prod
             valuesObject:
               podAnnotations:
                 app.komodor.com/app: https://github.com/uzubtsou/simple-app
@@ -71,7 +71,7 @@ spec:
           helm:
             parameters:
               - name: env
-                value: qa
+                value: prod
       syncPolicy:
         automated:
           prune: true

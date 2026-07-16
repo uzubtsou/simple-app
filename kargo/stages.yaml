@@ -43,3 +43,26 @@ spec:
             method: GET
             url: http://frontend.qa.svc.cluster.local:9898/healthz
             timeout: 10s
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: prod
+  namespace: simple-app
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: podinfo
+      sources:
+        stages:
+          - qa
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: http
+          as: check-prod
+          config:
+            method: GET
+            url: http://frontend.prod.svc.cluster.local:9898/healthz
+            timeout: 10s

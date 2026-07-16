@@ -2,19 +2,19 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: simple-app-qa
+  name: simple-app-prod
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: simple-app
-  path: ./overlays/qa
+  path: ./overlays/prod
   prune: true
   wait: true
   timeout: 5m
   postBuild:
     substitute:
-      env_tier: "qa"
+      env_tier: "prod"
       frontend_version: "6.9.0"
       backend_version: "6.9.0"

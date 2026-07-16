@@ -5,4 +5,5 @@ resources:
   - sources
   - dev/app.yaml
   - qa/app.yaml
+  - prod/app.yaml
   - notifications.yaml

@@ -47,3 +47,10 @@ repos:
         entry: kustomize build overlays/qa
         pass_filenames: false
         files: ^(base|overlays/qa)/
+
+      - id: kustomize-build-prod
+        name: kustomize build overlays/prod
+        language: system
+        entry: kustomize build overlays/prod
+        pass_filenames: false
+        files: ^(base|overlays/prod)/
