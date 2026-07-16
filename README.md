@@ -27,20 +27,22 @@ For Argo CD, install Argo CD in the `argocd` namespace. Both options use Istio a
 
 ## Deploy with Flux
 
-Apply all Flux environments with either command:
+Push the branch you want Flux to reconcile, then apply all environments:
 
 ```bash
-kubectl apply -k flux/
-# or
+git push -u origin HEAD
 just flux
 ```
+
+`just flux` renders the checked-out branch into the Flux `GitRepository` and
+always applies through the `sandpit` kubectl context.
 
 Apply one environment only:
 
 ```bash
-kubectl apply -k flux/dev/ # or: just flux-dev
-kubectl apply -k flux/qa/  # or: just flux-qa
-kubectl apply -k flux/prod/ # or: just flux-prod
+just flux-dev
+just flux-qa
+just flux-prod
 ```
 
 Flux will reconcile and deploy frontend and backend into the `dev`, `qa`, and `prod` namespaces. Watch progress:
@@ -71,7 +73,7 @@ Once all kustomizations are `Ready`:
 ## Teardown
 
 ```bash
-kubectl delete -k flux/
+kubectl --context sandpit delete -k flux/
 ```
 
 ## Try Kargo promotions
@@ -88,20 +90,23 @@ Freight item to `dev`, then promote it from `dev` to `qa` and `prod`. See
 
 ## Deploy with Argo CD
 
-With Argo CD installed in the `argocd` namespace, apply all environment-specific ApplicationSets with either command:
+With Argo CD installed in the `argocd` namespace, push the checked-out branch
+and apply all environment-specific ApplicationSets:
 
 ```bash
-kubectl apply -k argocd/
-# or
+git push -u origin HEAD
 just argocd
 ```
+
+`just argocd` renders the checked-out branch into each Git source and always
+applies through the `sandpit` kubectl context.
 
 Apply one environment only:
 
 ```bash
-kubectl apply -k argocd/dev/ # or: just argocd-dev
-kubectl apply -k argocd/qa/  # or: just argocd-qa
-kubectl apply -k argocd/prod/ # or: just argocd-prod
+just argocd-dev
+just argocd-qa
+just argocd-prod
 ```
 
 Watch reconciliation:
@@ -122,5 +127,5 @@ The generated `simple-app-dev`, `simple-app-qa`, and `simple-app-prod` Applicati
 ### Argo CD teardown
 
 ```bash
-kubectl delete -k argocd/
+kubectl --context sandpit delete -k argocd/
 ```

@@ -32,9 +32,6 @@ spec:
                     labels:
                       app.kubernetes.io/version: "${backend_version}"
   values:
-    podAnnotations:
-      app.komodor.com/app: "https://github.com/uzubtsou/simple-app"
-      app.komodor.com/app.ref: main
     fullnameOverride: backend
     replicaCount: 1
     ui:

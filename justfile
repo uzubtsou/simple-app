@@ -1,6 +1,25 @@
 default:
     @just --list
 
+[private]
+_render path:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    [[ "${BRANCH:-}" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "A branch named with letters, numbers, '.', '_', '/', or '-' must be checked out." >&2; exit 1; }
+    kubectl kustomize "{{ path }}" | sed -E "s#^([[:space:]]*(branch|targetRevision): )main\$#\1${BRANCH}#"
+
+[private]
+_apply path:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    export BRANCH="$(git branch --show-current)"
+    just --quiet _render "{{ path }}" | kubectl --context sandpit apply -f -
+
+check:
+    @just --fmt --check
+    @test "$(BRANCH=feature/test just --quiet _render flux | grep -c 'branch: feature/test')" -eq 1
+    @test "$(BRANCH=feature/test just --quiet _render argocd | grep -c 'targetRevision: feature/test')" -eq 3
+
 dev-urls:
     @echo
     @echo "dev URLs:"
@@ -37,38 +56,30 @@ argocd-prod-urls:
     @echo http://argocd-prod-info.sand.pit.im
     @echo http://argocd-prod-backend-info.sand.pit.im
 
-flux-dev:
-    kubectl apply -k flux/dev/
+flux-dev: (_apply "flux/dev")
     @just dev-urls
 
-flux-qa:
-    kubectl apply -k flux/qa/
+flux-qa: (_apply "flux/qa")
     @just qa-urls
 
-flux-prod:
-    kubectl apply -k flux/prod/
+flux-prod: (_apply "flux/prod")
     @just prod-urls
 
-flux:
-    kubectl apply -k flux/
+flux: (_apply "flux")
     @just dev-urls
     @just qa-urls
     @just prod-urls
 
-argocd-dev:
-    kubectl apply -k argocd/dev/
+argocd-dev: (_apply "argocd/dev")
     @just argocd-dev-urls
 
-argocd-qa:
-    kubectl apply -k argocd/qa/
+argocd-qa: (_apply "argocd/qa")
     @just argocd-qa-urls
 
-argocd-prod:
-    kubectl apply -k argocd/prod/
+argocd-prod: (_apply "argocd/prod")
     @just argocd-prod-urls
 
-argocd:
-    kubectl apply -k argocd/
+argocd: (_apply "argocd")
     @just argocd-dev-urls
     @just argocd-qa-urls
     @just argocd-prod-urls

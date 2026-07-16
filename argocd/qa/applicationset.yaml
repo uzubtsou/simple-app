@@ -44,8 +44,6 @@ spec:
             valuesObject:
               podAnnotations:
                 proxy.istio.io/config: '{"proxyMetadata":{"ISTIO_META_DNS_CAPTURE":"true","ISTIO_META_DNS_AUTO_ALLOCATE":"true"}}'
-                app.komodor.com/app: https://github.com/uzubtsou/simple-app
-                app.komodor.com/app.ref: main
         - repoURL: ghcr.io/stefanprodan/charts
           chart: podinfo
           targetRevision: 6.9.0
@@ -61,10 +59,6 @@ spec:
                 value: "#3EB489"
               - name: ui.message
                 value: Backend qa
-            valuesObject:
-              podAnnotations:
-                app.komodor.com/app: https://github.com/uzubtsou/simple-app
-                app.komodor.com/app.ref: main
         - repoURL: https://github.com/uzubtsou/simple-app
           targetRevision: main
           path: argocd/resources
